@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kannakos — Hongos Adaptógenos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg:         #F5F0E8;
+      --color-bg-alt:     #EDE7D9;
+      --color-bg-dark:    #2C2A24;
+      --color-primary:    #5C7A4E;
+      --color-primary-lt: #7A9C6A;
+      --color-accent:     #C4873A;
+      --color-text:       #2C2A24;
+      --color-text-soft:  #6B6356;
+      --color-text-light: #F5F0E8;
+      --color-border:     #D5CAB8;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Jost', sans-serif;
+      --section-pad: 100px 5%;
+      --radius: 4px;
+      --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-text); overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s var(--transition), transform 0.7s var(--transition); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.45s; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 5%; transition: background 0.4s, box-shadow 0.4s; }
+    nav.scrolled { background: rgba(245, 240, 232, 0.95); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--color-border); }
+    .nav-logo { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--color-text-light); transition: color 0.4s; }
+    nav.scrolled .nav-logo { color: var(--color-text); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.85); transition: color 0.3s; }
+    nav.scrolled .nav-links a { color: var(--color-text-soft); }
+    .nav-links a:hover { color: var(--color-accent) !important; }
+
+    #hero { min-height: 100vh; background: var(--color-bg-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 5% 80px; position: relative; overflow: hidden; }
+    #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 110%, rgba(92, 122, 78, 0.25) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 20% 20%, rgba(196, 135, 58, 0.12) 0%, transparent 60%); pointer-events: none; }
+    #hero::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(245,240,232,0.06); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+    .hero-eyebrow { font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 24px; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(4rem, 10vw, 8rem); font-weight: 300; line-height: 0.95; color: var(--color-text-light); letter-spacing: -0.01em; margin-bottom: 28px; }
+    .hero-title em { font-style: italic; color: rgba(245,240,232,0.5); }
+    .hero-sub { max-width: 520px; font-size: 1rem; line-height: 1.7; color: rgba(245,240,232,0.6); font-weight: 300; margin-bottom: 48px; }
+    .btn { display: inline-block; padding: 14px 36px; border: 1px solid var(--color-accent); color: var(--color-accent); font-family: var(--font-body); font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border-radius: var(--radius); transition: background 0.3s, color 0.3s; }
+    .btn:hover { background: var(--color-accent); color: var(--color-text-light); }
+    .hero-scroll-hint { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(245,240,232,0.35); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; }
+    .scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(245,240,232,0.35), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    #intro { padding: var(--section-pad); max-width: 900px; margin: 0 auto; text-align: center; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 20px; display: block; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 400; line-height: 1.15; margin-bottom: 24px; }
+    .section-title em { font-style: italic; color: var(--color-primary); }
+    .lead { font-size: 1.05rem; line-height: 1.8; color: var(--color-text-soft); font-weight: 300; max-width: 680px; margin: 0 auto; }
+
+    #productos { padding: var(--section-pad); background: var(--color-bg-alt); }
+    .products-header { text-align: center; margin-bottom: 64px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; max-width: 1100px; margin: 0 auto; }
+    .product-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 44px 36px; position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(44,42,36,0.1); }
+    .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); }
+    .card-icon { font-size: 2.8rem; margin-bottom: 20px; display: block; }
+    .card-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 10px; display: block; }
+    .card-name { font-family: var(--font-display); font-size: 2rem; font-weight: 400; line-height: 1.2; margin-bottom: 16px; }
+    .card-name em { font-style: italic; color: var(--color-primary); }
+    .card-desc { font-size: 0.92rem; line-height: 1.75; color: var(--color-text-soft); font-weight: 300; margin-bottom: 24px; }
+    .card-benefits { list-style: none; margin-bottom: 28px; }
+    .card-benefits li { font-size: 0.82rem; padding: 6px 0; border-bottom: 1px solid var(--color-border); color: var(--color-text-soft); display: flex; align-items: center; gap: 8px; }
+    .card-benefits li::before { content: '—'; color: var(--color-primary); flex-shrink: 0; }
+    .card-pill-info { background: var(--color-bg-alt); border-radius: var(--radius); padding: 12px 16px; font-size: 0.78rem; color: var(--color-text-soft); display: flex; align-items: center; gap: 8px; }
+    .card-pill-info strong { color: var(--color-text); }
+
+    #nosotros { padding: var(--section-pad); max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .nosotros-text .section-title { text-align: left; }
+    .nosotros-text .lead { margin: 0; text-align: left; }
+    .nosotros-values { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .value-item { padding: 28px 24px; border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-bg-alt); }
+    .value-icon { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+    .value-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+    .value-desc { font-size: 0.82rem; line-height: 1.6; color: var(--color-text-soft); }
+
+    #contacto { padding: var(--section-pad); background: var(--color-bg-dark); text-align: center; position: relative; overflow: hidden; }
+    #contacto::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(92,122,78,0.2) 0%, transparent 70%); pointer-events: none; }
+    #contacto .section-label { color: var(--color-accent); }
+    #contacto .section-title { color: var(--color-text-light); }
+    #contacto .lead { color: rgba(245,240,232,0.55); }
+    .contact-grid { display: flex; justify-content: center; gap: 24px; margin-top: 52px; flex-wrap: wrap; }
+    .contact-card { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px 40px; border: 1px solid rgba(245,240,232,0.12); border-radius: 8px; background: rgba(245,240,232,0.04); transition: background 0.3s, border-color 0.3s; min-width: 160px; cursor: pointer; }
+    .contact-card:hover { background: rgba(245,240,232,0.08); border-color: var(--color-accent); }
+    .contact-card .c-icon { font-size: 1.8rem; }
+    .contact-card .c-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+    .contact-card .c-value { font-family: var(--font-display); font-size: 1.05rem; color: var(--color-text-light); }
+
+    footer { background: var(--color-bg-dark); border-top: 1px solid rgba(245,240,232,0.08); padding: 32px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; letter-spacing: 0.08em; color: var(--color-text-light); }
+    .footer-copy { font-size: 0.75rem; color: rgba(245,240,232,0.3); letter-spacing: 0.05em; }
+
+    @media (max-width: 768px) {
+      :root { --section-pad: 72px 6%; }
+      .nav-links { display: none; }
+      #nosotros { grid-template-columns: 1fr; gap: 48px; }
+      .hero-title { font-size: clamp(3rem, 15vw, 5rem); }
+    }
+    @media (max-width: 480px) {
+      .nosotros-values { grid-template-columns: 1fr; }
+      .contact-grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-logo">Kannakos</div>
+    <ul class="nav-links">
+      <li><a href="#productos">Hongos</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <section id="hero">
+    <p class="hero-eyebrow reveal">Hongos Adaptógenos Naturales</p>
+    <h1 class="hero-title reveal reveal-delay-1">Kanna<em>kos</em></h1>
+    <p class="hero-sub reveal reveal-delay-2">La naturaleza lleva millones de años perfeccionando sus fórmulas. Nosotros las ponemos en cápsulas.</p>
+    <a href="#productos" class="btn reveal reveal-delay-3">Conocé nuestros hongos</a>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </section>
+
+  <section id="intro">
+    <span class="section-label reveal">¿Qué son los adaptógenos?</span>
+    <h2 class="section-title reveal reveal-delay-1">Equilibrio que viene<br><em>de la tierra</em></h2>
+    <p class="lead reveal reveal-delay-2">Los hongos adaptógenos son organismos que ayudan al cuerpo a gestionar el estrés, fortalecer las defensas y recuperar el equilibrio natural. Usados durante siglos en la medicina tradicional, hoy disponibles en cápsulas de 30 píldoras listas para incorporar a tu rutina.</p>
+  </section>
+
+  <section id="productos">
+    <div class="products-header">
+      <span class="section-label reveal">Nuestra línea</span>
+      <h2 class="section-title reveal reveal-delay-1">Los tres hongos<br><em>Kannakos</em></h2>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <span class="card-icon">🦁</span>
+        <span class="card-tag">Claridad mental</span>
+        <h3 class="card-name">Melena <em>de León</em></h3>
+        <p class="card-desc"><em>Hericium erinaceus</em> — El hongo de la mente. Conocido por estimular el factor de crecimiento nervioso (NGF), apoya la salud cerebral, la concentración y la memoria.</p>
+        <ul class="card-benefits">
+          <li>Mejora foco y concentración</li>
+          <li>Apoya la memoria y cognición</li>
+          <li>Favorece el estado de ánimo</li>
+          <li>Neuroprotector natural</li>
+        </ul>
+        <div class="card-pill-info">💊 <span><strong>30 cápsulas</strong> por envase</span></div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-1">
+        <span class="card-icon">✨</span>
+        <span class="card-tag">Belleza & piel</span>
+        <h3 class="card-name">Tremella — <em>belleza</em></h3>
+        <p class="card-desc"><em>Tremella fuciformis</em> — El hongo de la belleza. Capaz de retener hasta 500 veces su peso en agua, nutre la piel desde adentro y retrasa el envejecimiento celular.</p>
+        <ul class="card-benefits">
+          <li>Hidratación profunda de la piel</li>
+          <li>Efecto antienvejecimiento natural</li>
+          <li>Antioxidante potente</li>
+          <li>Cabello y uñas más fuertes</li>
+        </ul>
+        <div class="card-pill-info">💊 <span><strong>30 cápsulas</strong> por envase</span></div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2">
+        <span class="card-icon">🌿</span>
+        <span class="card-tag">Estrés & energía</span>
+        <h3 class="card-name">Ashwa<em>gandha</em></h3>
+        <p class="card-desc"><em>Withania somnifera</em> — La raíz milenaria del Ayurveda. Adaptógeno clásico que regula el cortisol, reduce la fatiga y devuelve la vitalidad en momentos de alta demanda.</p>
+        <ul class="card-benefits">
+          <li>Reduce el estrés y ansiedad</li>
+          <li>Regula el cortisol</li>
+          <li>Aumenta la energía y resistencia</li>
+          <li>Mejora la calidad del sueño</li>
+        </ul>
+        <div class="card-pill-info">💊 <span><strong>30 cápsulas</strong> por envase</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="nosotros">
+    <div class="nosotros-text">
+      <span class="section-label reveal">Quiénes somos</span>
+      <h2 class="section-title reveal reveal-delay-1">Un proyecto <em>con raíces</em></h2>
+      <p class="lead reveal reveal-delay-2">Kannakos nació del convencimiento de que el bienestar real no viene de laboratorios artificiales, sino de lo que la naturaleza ya perfeccionó.</p>
+      <p class="lead reveal reveal-delay-3" style="margin-top: 16px;">Seleccionamos, formulamos y envasamos cada producto con cuidado, buscando la mayor pureza y efectividad para que puedas sentir la diferencia.</p>
+    </div>
+    <div class="nosotros-values">
+      <div class="value-item reveal">
+        <span class="value-icon">🌱</span>
+        <div class="value-title">Natural</div>
+        <div class="value-desc">Ingredientes de origen natural, sin aditivos innecesarios.</div>
+      </div>
+      <div class="value-item reveal reveal-delay-1">
+        <span class="value-icon">🔬</span>
+        <div class="value-title">Respaldado</div>
+        <div class="value-desc">Formulaciones basadas en evidencia científica y tradición milenaria.</div>
+      </div>
+      <div class="value-item reveal reveal-delay-2">
+        <span class="value-icon">📦</span>
+        <div class="value-title">Accesible</div>
+        <div class="value-desc">30 cápsulas por envase para empezar sin compromiso.</div>
+      </div>
+      <div class="value-item reveal reveal-delay-3">
+        <span class="value-icon">💚</span>
+        <div class="value-title">Honesto</div>
+        <div class="value-desc">Lo que dice el envase es lo que hay. Sin letra chica.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <span class="section-label reveal">Hablemos</span>
+    <h2 class="section-title reveal reveal-delay-1">¿Querés saber más<br><em>o hacer un pedido?</em></h2>
+    <p class="lead reveal reveal-delay-2">Escribinos por cualquiera de estos canales. Respondemos rápido.</p>
+    <div class="contact-grid">
+      <a href="https://wa.me/5491100000000" target="_blank" class="contact-card reveal">
+        <span class="c-icon">💬</span>
+        <span class="c-label">WhatsApp</span>
+        <span class="c-value">Escribinos</span>
+      </a>
+      <a href="mailto:hola@kannakos.com" class="contact-card reveal reveal-delay-1">
+        <span class="c-icon">✉️</span>
+        <span class="c-label">Email</span>
+        <span class="c-value">hola@kannakos.com</span>
+      </a>
+      <a href="https://instagram.com/kannakos" target="_blank" class="contact-card reveal reveal-delay-2">
+        <span class="c-icon">📷</span>
+        <span class="c-label">Instagram</span>
+        <span class="c-value">@kannakos</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Kannakos</div>
+    <div class="footer-copy">© 2025 Kannakos — Hongos Adaptógenos Naturales</div>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    setTimeout(() => {
+      document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
+    }, 100);
+  </script>
+
+</body>
+</html>
